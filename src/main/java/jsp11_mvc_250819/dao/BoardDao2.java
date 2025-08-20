@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jsp11_mvc_250819.dto.BoardDto;
-import jsp11_mvc_250819.dto.MemberDto;
-
-public class BoardDao {
+import jsp11_mvc_250819.dto.BoardMemberDto;
+// BoardMemberDto 사용함
+public class BoardDao2 {
 	private String driverName = "com.mysql.cj.jdbc.Driver"; 
 	private String url = "jdbc:mysql://localhost:3306/jspdb";
 	private String username = "root";
@@ -22,17 +22,20 @@ public class BoardDao {
 	
 	
 	// 게시판의 모든 글 목록 가져와서 반환하는 메서드
-	public List<BoardDto> boardList() {
+	public List<BoardMemberDto> boardList() {
 		// 기존:sql문
 		//String sql = "SELECT * FROM boardmvc ORDER BY bnum DESC";
 		
 		// membermvc 테이블과 boardmvc 테이블 조인한 sql문
-		String sql = "SELECT row_number() OVER (ORDER BY bnum ASC) AS bno, "
-				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bhit, b.bdate "
-				+ "FROM boardmvc b LEFT JOIN membermvc m "
-				+ "ON b.memberid = m.memberid ORDER BY bno DESC;";
+		String sql = "SELECT b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bhit, b.bdate "
+				+ "FROM boardmvc b "
+				+ "INNER JOIN membermvc m "
+				+ "ON b.memberid = m.memberid "
+				+ "ORDER BY bnum DESC;";
 		
-		List<BoardDto> boardDtos = new ArrayList<>();
+		//기존:리스트
+		//List<BoardDto> boardDtos = new ArrayList<>();
+		List<BoardMemberDto> bmDtos = new ArrayList<>();
 
 		try {
 			Class.forName(driverName);
@@ -47,25 +50,18 @@ public class BoardDao {
 				String btitle = rs.getString("btitle");
 				String bcontent = rs.getString("bcontent");
 				String memberid = rs.getString("memberid");
-				int bhit = rs.getInt("bhit");
-				String bdate = rs.getString("bdate");
 				// email 추가
 				String memberemail = rs.getString("memberemail");
-				// 실제 글 개수 가져오는 데이터
-				int bno = rs.getInt("bno");
+				int bhit = rs.getInt("bhit");
+				String bdate = rs.getString("bdate");
 				
 				// 기존:BoardDto 생성자 이용해서 그 값을 넣어줌
 				//BoardDto boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate);
 				// 기존:만들어진 boardDto 인스턴스를 리스트에 넣어준다
 				//boardDtos.add(boardDto);
 				
-				// BoardDto 인스턴스 boardDto에다가 memberDto 넣어주고, 그 전에 memberDto 인스턴스로 만들어줘야 함
-				// 그리고 memberDto 인스턴스에다가 필요한 id, email 값 넣어주기 
-				MemberDto memberDto = new MemberDto();
-				memberDto.setMemberid(memberid);
-				memberDto.setMemberemail(memberemail);
-				BoardDto boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate, memberDto, bno);
-				boardDtos.add(boardDto);
+				BoardMemberDto bmDto = new BoardMemberDto(bnum, btitle, bcontent, memberid, memberemail, bhit, bdate);
+				bmDtos.add(bmDto);
 			} 
 
 			} catch (Exception e) {
@@ -87,7 +83,7 @@ public class BoardDao {
 					e.printStackTrace();
 				}
 			}
-		return boardDtos; // 기존:리스트 객체로 된 boardDtos 반환
+		return bmDtos; // 기존:리스트 객체로 된 boardDtos 반환
 	}
 	
 	
@@ -128,12 +124,8 @@ public class BoardDao {
 	
 	// 클릭한 글 세부내용 가져오기 메서드
 	public BoardDto boardDetail(String num) {
-		//String sql = "SELECT * FROM boardmvc WHERE bnum = ?";
-		String sql = "SELECT b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
-				+ "FROM boardmvc b "
-				+ "LEFT JOIN membermvc m "
-				+ "ON b.memberid = m.memberid "
-				+ "WHERE bnum = ? ORDER BY bnum DESC";
+		String sql = "SELECT * FROM boardmvc WHERE bnum = ?";
+		// BoardDto boardDto = new BoardDto();
 		BoardDto boardDto = null;
 		
 		try {
@@ -161,14 +153,8 @@ public class BoardDao {
 				String memberid = rs.getString("memberid");
 				int bhit = rs.getInt("bhit");
 				String bdate = rs.getString("bdate");
-				// 이메일 추가
-				String memberemail = rs.getString("memberemail");
-
-				// 이메일 추가한 거 넣어주기
-				MemberDto memberDto = new MemberDto();
-				memberDto.setMemberid(memberid);
-				memberDto.setMemberemail(memberemail);
-				boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);				
+				
+				boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate);				
 			}
 			
 		} catch (Exception e) {
@@ -258,37 +244,6 @@ public class BoardDao {
 	
 	
 	
-	// 게시글 눌렀을 때 조회수 올라가게 해주는 메서드
-	public void updateHit(String num) {
-		String sql = "UPDATE boardmvc SET bhit = (bhit + 1) WHERE bnum = ?";
-		
-		try {
-			Class.forName(driverName);
-			conn = DriverManager.getConnection(url, username, password);
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, num);
-			pstmt.executeUpdate();
-			
-		} catch (Exception e) {
-			System.out.println("DB 에러 발생, 조회수 에러");
-			e.printStackTrace();
-		} finally { 
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-			}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	
 	
 }
-	
-	

@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>약국</title>
-    <link rel="stylesheet" href="style.css">
-    <!--  기본 style.css -->
+    <link rel="stylesheet" href="indexStyle.css">
+    <!--  기본 indexStyle.css / 공통 만들고 싶다-->
 </head>
 <body>
     <header class="header">
@@ -27,7 +27,7 @@
             <h2>우리동네 행복 약국 홈페이지에 오신 것을 환영합니다</h2>
             <p>약국에 관한 다양한 정보와 팁을 공유할 수 있는 게시판입니다. <br/>
             약에 관한 궁금한 점을 질문하거나, 약국 운영에 관한 이야기를 나누세요.</p>
-            <a href="boardList.do" class="button">자유게시판 바로가기</a>
+            <a href="login.do" class="button">로그인</a>
         </section>
     </main>
 

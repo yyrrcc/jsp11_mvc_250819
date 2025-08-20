@@ -1,9 +1,9 @@
 @charset "UTF-8";
-/* postDetail.css */
+
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
+    background-color: #d3e1d3; /* 눈 안 아픈 색 찾아보기 기본 f4f4f4*/
     margin: 0;
     padding: 0;
     display: flex;
@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    background-color: #a3cca2;
+    background-color: #a3cca2; /* 기본 초록 28a745 눈 좋은 에버그린 a3cca2*/
     color: white;
     padding: 15px 0;
     text-align: center;
@@ -46,27 +46,16 @@ footer {
 }
 
 main {
-    padding: 30px;
-    background-color: #ffffff;
+    padding: 20px;
+    background-color: #f3f3f3; /* #DCDCDC */
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    
+    flex: 1;    
 }
 
-h2 {
-    color: #000000;
-}
-
-p.author {
-    color: #8a8a8a;
-    font-size: 14px;
-}
-
-.post-detail p {
-    line-height: 1.6;
-    color: #4a4a4a;
+h2.title, h2.post-detail {
+    color: #a3cca2;
 }
 
 a.button {
@@ -80,5 +69,39 @@ a.button {
 }
 
 a.button:hover {
-    background-color: #e69168;
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #a3cca2;
+    color: white;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #a3cca2;
+    color: white;
+    padding: 10px 
 }

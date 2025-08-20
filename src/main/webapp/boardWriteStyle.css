@@ -3,7 +3,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
+    background-color: #d3e1d3;
     margin: 0;
     padding: 0;
     display: flex;
@@ -47,7 +47,7 @@ footer {
 
 main {
     padding: 30px;
-    background-color: #ffffff;
+    background-color: #f3f3f3;
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

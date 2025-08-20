@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성</title>
-    <link rel="stylesheet" href="boardWrite.css">
+    <link rel="stylesheet" href="boardWriteStyle.css">
 </head>
 <body>
     <header class="header">
@@ -32,10 +32,11 @@
                 <textarea id="content" name="content" rows="10" cols="30" placeholder="게시글 내용을 입력하세요" required></textarea><br>
 				
 				<label for="writer">작성자:</label>
-                <input type="text" id="writer" name="writer" placeholder="작성자를 입력하세요" required><br>
+                <input type="text" id="writer" name="writer" value="${sessionScope.sessionId }" readonly><br>
                 
                 <button type="submit" class="button">게시글 작성</button>
                 <button type="reset" class="button">다시 작성</button>
+                <button type="reset" class="button">게시판 목록으로 가기(아직 수정 안 함)</button>                
             </form>
         </section>
     </main>
