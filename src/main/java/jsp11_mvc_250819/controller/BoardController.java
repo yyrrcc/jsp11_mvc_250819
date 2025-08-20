@@ -50,7 +50,11 @@ public class BoardController extends HttpServlet {
         } else if (comm.equals("boardDetail.do")) { // 게시글 내용보기
         	String bnum = request.getParameter("bnum");
         	BoardDto boardDto = boardDao.boardDetail(bnum);
-        	request.setAttribute("boardDto", boardDto);
+        	if (boardDto == null) { // 글이 삭제 된 경우
+            	request.setAttribute("msg", "존재하지 않은 게시글 입니다.");
+        	} else {
+            	request.setAttribute("boardDto", boardDto);
+        	}
         	viewpage = "boardDetail.jsp";
         } else if (comm.equals("boardWrite.do")) { // 글작성
         	

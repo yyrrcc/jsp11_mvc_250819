@@ -2,8 +2,8 @@
 
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #E6E6E6; /* 눈 안 아픈 색 찾아보기 E6E6E6 기본 f4f4f4*/
     margin: 0;
     padding: 0;
     display: flex;
@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    background-color: #28a745; /* 초록*/
+    background-color: #a3cca2; /* 기본 초록 28a745 눈 좋은 에버그린 a3cca2*/
     color: white;
     padding: 15px 0;
     text-align: center;
@@ -40,14 +40,14 @@ nav ul li a {
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     margin-top: auto;
 }
 
 main {
     padding: 20px;
-    background-color: white;
+    background-color: #E6E6E6; /* #DCDCDC */
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -55,13 +55,13 @@ main {
 }
 
 h2.title, h2.post-detail {
-    color: #28a745;
+    color: #a3cca2;
 }
 
 a.button {
     display: inline-block;
     margin-top: 20px;
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     padding: 10px 20px;
     text-decoration: none;
@@ -88,7 +88,7 @@ th, td {
 }
 
 th {
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
 }
 
@@ -101,7 +101,7 @@ form input, form textarea {
 }
 
 form button {
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     padding: 10px 
 }

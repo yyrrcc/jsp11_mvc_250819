@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    background-color: #28a745; /* 초록색 계열 */
+    background-color: #a3cca2; /* 초록색 계열 */
     color: white;
     padding: 15px 0;
     text-align: center;
@@ -40,7 +40,7 @@ nav ul li a {
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #28a745; /* 초록색 계열 */
+    background-color: #a3cca2; /* 초록색 계열 */
     color: white;
 	margin-top: auto;
 }
@@ -63,7 +63,7 @@ h2.title {
 .button {
     display: inline-block;
     margin-bottom: 20px;
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     padding: 10px 20px;
     text-decoration: none;
@@ -88,7 +88,7 @@ th, td {
 }
 
 th {
-    background-color: #28a745; /* 초록색 계열 */
+    background-color: #a3cca2; /* 초록색 계열 */
     color: white;
 }
 
@@ -101,7 +101,7 @@ tr:hover {
 }
 
 a {
-    color: #28a745;
+    color: #a3cca2;
     text-decoration: none;
 }
 

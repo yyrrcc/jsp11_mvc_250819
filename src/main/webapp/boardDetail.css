@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 /* postDetail.css */
 
 body {
@@ -13,7 +12,7 @@ body {
 }
 
 header {
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     padding: 15px 0;
     text-align: center;
@@ -41,7 +40,7 @@ nav ul li a {
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     margin-top: auto;
 }
@@ -73,7 +72,7 @@ p.author {
 a.button {
     display: inline-block;
     margin-top: 20px;
-    background-color: #28a745;
+    background-color: #a3cca2;
     color: white;
     padding: 10px 20px;
     text-decoration: none;

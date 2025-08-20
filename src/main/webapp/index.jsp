@@ -14,7 +14,7 @@
         <h1>우리동네 행복 약국</h1>
         <nav>
             <ul>
-                <li><a href="index.jsp">홈</a></li>
+                <li><a href="index.do">홈</a></li>
                 <li><a href="#">약국소개</a></li>
                 <li><a href="boardList.do">자유게시판</a></li>
                 <li><a href="#">고객센터</a></li>

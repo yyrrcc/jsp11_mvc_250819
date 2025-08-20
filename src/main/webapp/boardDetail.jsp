@@ -9,6 +9,21 @@
     <link rel="stylesheet" href="boardDetail.css">
 </head>
 <body>
+<%
+	
+	if (request.getAttribute("msg") != null) {
+		String msginfo = request.getAttribute("msg").toString();
+		out.println("<script> alert('"+ msginfo +"'); location.href = 'boardList.do'; </script>");
+	} 
+	
+	//if(request.getAttribute("msg") != null ) {
+	//	out.println("<script> alert('존재하지 않는 글!'); location.href = 'boardList.do'; </script>");
+	//}
+
+%>
+<script>
+
+</script>
     <header class="header">
         <h1>약국 게시판</h1>
         <nav>
