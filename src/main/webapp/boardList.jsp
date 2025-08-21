@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 목록</title>
-    <link rel="stylesheet" href="boardListStyle.css">
+    <link rel="stylesheet" href="css/boardListStyle.css">
 </head>
 <body>
 
@@ -33,13 +33,26 @@
         	</c:if>
         </h4>
         <div class="wrapper">
-        	<a href="boardWrite.do" class="button">글쓰기</a>        
+        	<a href="boardWrite.do" class="button">글쓰기</a> 
+        	
+        	<form action="#" method="get">
+        		<select name="searchType" class="searchs">
+        			<option value="btitle">제목</option>
+        			<option value="bcontent">내용</option>
+        			<option value="searchTC">제목 + 내용</option>
+        			<option value="b.memberid">작성자</option>
+        			</select>
+        		<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요" class="searchs">
+        		<input type="submit" class="searchbutton" value="검색">
+        		<button type="submit" class="searchbutton">검색버튼</button>
+        	</form>
+        	
 	        	<table class="table">
 	                <thead>
 	                    <tr class="header">
 	                        <th>번호</th>
 	                        <th>제목</th>
-	                        <th>글쓴이</th>
+	                        <th>아이디</th>
 	                        <th>이메일</th>
 	                        <th>조회수</th>
 	                        <th>작성 시간</th>

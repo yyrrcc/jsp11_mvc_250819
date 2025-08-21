@@ -7,18 +7,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세보기</title>
-    <link rel="stylesheet" href="boardDetailStyle.css">
+    <link rel="stylesheet" href="css/boardDetailStyle.css">
 </head>
 <body>
 
 <%
-	
+	// 게시글 내용 볼 때 만약 없는 게시글이라면 메시지 출력
 	if (request.getAttribute("msg") != null) {
-		String msginfo = (String) request.getAttribute("msg"); // (String) 으로 받는 것과 .toString()으로 받는 거 차이? ********
+		String msginfo = (String) request.getAttribute("msg");
 		out.println("<script> alert('"+ msginfo +"'); location.href = 'boardList.do'; </script>");
 	}
 	
-	/*
+	/* 삭제된 글일 경우 방법 2.
 	System.out.println("msg : " + request.getParameter("msg"));
 	if (request.getParameter("msg") != null) {
 		out.println("<script> alert('해당 글은 존재하지 않습니다!'); location.href = 'boardList.do'; </script>");
@@ -46,8 +46,9 @@
     <main>
     	<h2>${boardDto.btitle }</h2>
         <div class="post-detail">
-            <p class="author">이메일 : ${boardDto.memberDto.memberemail} | 조회수 : ${boardDto.bhit } | 작성 시간: ${boardDto.bdate }</p>
-            <p><strong>작성자:</strong> ${boardDto.memberid }</p>
+            <p class="author">이메일 : ${boardDto.memberDto.memberemail } | 조회수 : ${boardDto.bhit } | 작성 시간: ${boardDto.bdate }</p>
+            <p><strong>아이디:</strong> ${boardDto.memberid }</p>
+            <p><strong>작성자:</strong> ${boardDto.memberDto.membername }</p>
             <p><strong>글 내용:</strong><br>
             ${boardDto.bcontent }</p>
         </div>

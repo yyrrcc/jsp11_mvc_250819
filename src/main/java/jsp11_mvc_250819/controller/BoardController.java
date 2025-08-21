@@ -52,8 +52,19 @@ public class BoardController extends HttpServlet {
         if (comm.equals("index.do")) { // 홈화면
         	viewpage = "index.jsp";
         } else if (comm.equals("boardList.do")) { // 게시판 목록보기
-        	boardDtos = boardDao.boardList();
-        	request.setAttribute("boardDtos", boardDtos);
+        	// 게시글 검색 한 결과값 확인
+        	String searchType = request.getParameter("searchType");
+        	String searchKeyword = request.getParameter("searchKeyword");
+        	//System.out.println("검색옵션 : " + searchType);
+        	//System.out.println("입력값 : " + searchKeyword);
+        	
+        	// 공백을 입력했을 때 모든 글이 나올 수 있게 !searchKeyword.strip().isEmpty()
+        	if (searchType != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) { // 게시글 검색한 경우
+        		boardDtos = boardDao.searchBoardList(searchKeyword, searchType);
+        	} else { // 모든 게시판 글 목록 원하는 경우
+        		boardDtos = boardDao.boardList();
+        	}
+    		request.setAttribute("boardDtos", boardDtos);
         	viewpage = "boardList.jsp";
         } else if (comm.equals("boardDetail.do")) { // 게시글 내용보기
         	String bnum = request.getParameter("bnum");
@@ -62,7 +73,7 @@ public class BoardController extends HttpServlet {
         	BoardDto boardDto = boardDao.boardDetail(bnum);
         	if (boardDto == null) { // 글이 삭제 된 경우
             	request.setAttribute("msg", "존재하지 않은 게시글 입니다.");
-        		/* 이렇게도 가능하다. jsp에서 getParameter로 가져오기
+        		/* 삭제된 글일 경우 방법 2. jsp에서 getParameter로 가져오기
             	response.sendRedirect("boardDetail.jsp?msg=0");
             	return;
             	*/
