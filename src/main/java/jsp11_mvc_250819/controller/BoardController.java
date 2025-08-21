@@ -39,7 +39,8 @@ public class BoardController extends HttpServlet {
         String uri = request.getRequestURI();
         String comm = uri.substring(uri.lastIndexOf('/') + 1); // 주소만 가져옴. / 안 가져옴.
         System.out.println("comm : " + comm); // 콘솔창에 찍어주기
-        
+        // 이클립스 run configurations 에서 비밀번호 설정함, 콘솔창에 비밀번호 보여줌
+        System.out.println(System.getenv("DB_PASSWORD"));
         HttpSession session = null;
         String viewpage = null;
         BoardDao boardDao = new BoardDao();
@@ -56,6 +57,7 @@ public class BoardController extends HttpServlet {
         	viewpage = "boardList.jsp";
         } else if (comm.equals("boardDetail.do")) { // 게시글 내용보기
         	String bnum = request.getParameter("bnum");
+        	// 조회수 올려주는 메서드 호출 먼저 불러오고 그 다음 글 내용 봐야함 순서 중요
         	boardDao.updateHit(bnum);
         	BoardDto boardDto = boardDao.boardDetail(bnum);
         	if (boardDto == null) { // 글이 삭제 된 경우
