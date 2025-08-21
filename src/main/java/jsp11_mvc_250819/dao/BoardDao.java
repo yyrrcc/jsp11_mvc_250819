@@ -21,25 +21,35 @@ public class BoardDao {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
+	// 만약 게시글이 308개가 있고 15개씩 보인다고 하면 308/15 = 20.xx 총 20 + 1 페이지가 보임
+	// 그리고 페이지 블록을 10개로 지정하면 1~10, 11~20, 21 이렇게 3개 블록이 보임
+	public static final int pageSize = 15; // 한 페이지당 보이는 글 수
+	public static final int blockSize = 10; // 페이지 블록 크기 (하단에 보여지는 [1][2] ..)
 	
-	// 게시판의 모든 글 목록 가져와서 반환하는 메서드
-	public List<BoardDto> boardList() {
-		// 기존:sql문
+	
+	
+	// 게시판의 모든 글 목록 가져와서 반환하는 메서드 + 페이징
+	public List<BoardDto> boardList(int page) {
+		// 기존:하나의 테이블 sql문
 		//String sql = "SELECT * FROM boardmvc ORDER BY bnum DESC";
 		
-		// membermvc 테이블과 boardmvc 테이블 조인한 sql문
+		// 새로운:membermvc 테이블과 boardmvc 테이블 조인한 sql문
 		String sql = "SELECT row_number() OVER (ORDER BY bnum ASC) AS bno, "
 				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bhit, b.bdate "
 				+ "FROM boardmvc b LEFT JOIN membermvc m "
-				+ "ON b.memberid = m.memberid ORDER BY bno DESC;";
-		
+				+ "ON b.memberid = m.memberid ORDER BY bno DESC"
+				+ " LIMIT ? OFFSET ?";
 		List<BoardDto> boardDtos = new ArrayList<>();
+		
+		int offset = (page - 1) * pageSize;
 
 		try {
 			Class.forName(driverName);
 			conn = DriverManager.getConnection(url, username, password);
 			
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, pageSize);
+			pstmt.setInt(2, offset);
 			rs = pstmt.executeQuery(); // 모든 데이터값을 전달 받음
 			
 			while (rs.next()) {
@@ -88,10 +98,50 @@ public class BoardDao {
 					e.printStackTrace();
 				}
 			}
-		return boardDtos; // 기존:리스트 객체로 된 boardDtos 반환
+		return boardDtos;
 	}
 	
 	
+	
+	
+	// 게시판의 모든 글 개수 반환하는 메서드
+	public int countBoard() {
+		String sql = "SELECT count(*) AS totalCount FROM boardmvc";
+		int totalCount = 0;
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				totalCount = rs.getInt("totalCount");
+			}
+
+			} catch (Exception e) {
+				System.out.println("DB 에러 발생, 모든 글 개수 가져오기 실패");
+				e.printStackTrace();
+			} finally { 
+				try {
+					if (rs != null) {
+						rs.close();
+				}
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (conn != null) {
+						conn.close();
+				}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		return totalCount;
+	}
+
 	
 	
 	// 게시글 검색 결과 보내주는 메서드

@@ -72,6 +72,11 @@
 	          	      </c:forEach>
 	                </tbody>
 	            </table>
+	            
+	            <!-- 페이지 보여주는 곳 -->
+	            <a href="">1페이지</a>
+	            <a href="">1페이지</a>
+	            <a href="">1페이지</a>
         </div>
     </main>
 

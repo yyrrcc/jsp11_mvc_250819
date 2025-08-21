@@ -55,6 +55,18 @@ public class BoardController extends HttpServlet {
         	session.getAttribute("sessionId");
         	viewpage = "index.jsp";
         } else if (comm.equals("boardList.do")) { // 게시판 목록보기
+        	//public static final int pageSize = 15; // 한 페이지당 보이는 글 수
+        	//public static final int blockSize = 10; // 페이지 블록 크기 (하단에 보여지는 [1][2] ..)
+        	
+        	int currentPage = 1; // 현재 페이지, 기본 페이지, 초기화라 생각하면 됨 
+        	int totalCount = boardDao.countBoard(); // 전체 글 수
+            int totalPage = ; // 전체 페이지 수
+
+            int startPage;       // 시작 페이지
+            int endPage;         // 끝 페이지
+            int startRow;        // 시작 행
+            int endRow;          // 끝 행
+        	
         	// 게시글 검색 한 결과값 확인
         	String searchType = request.getParameter("searchType");
         	String searchKeyword = request.getParameter("searchKeyword");
@@ -65,10 +77,14 @@ public class BoardController extends HttpServlet {
         	if (searchType != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) { // 게시글 검색한 경우
         		boardDtos = boardDao.searchBoardList(searchKeyword, searchType);
         	} else { // 모든 게시판 글 목록 원하는 경우
-        		boardDtos = boardDao.boardList();
+        		boardDtos = boardDao.boardList(currentPage);
         	}
     		request.setAttribute("boardDtos", boardDtos);
         	viewpage = "boardList.jsp";
+        	
+        	
+        	
+        	
         } else if (comm.equals("boardDetail.do")) { // 게시글 내용보기
         	String bnum = request.getParameter("bnum");
         	// 조회수 올려주는 메서드 호출 먼저 불러오고 그 다음 글 내용 봐야함 순서 중요
