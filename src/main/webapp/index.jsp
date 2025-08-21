@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>약국</title>
-    <link rel="stylesheet" href="indexStyle.css">
+    <link rel="stylesheet" href="css/indexStyle.css">
     <!--  기본 indexStyle.css / 공통 만들고 싶다-->
 </head>
 <body>

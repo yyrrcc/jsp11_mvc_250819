@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 수정</title>
-    <link rel="stylesheet" href="boardEditStyle.css">
+    <link rel="stylesheet" href="css/boardEditStyle.css">
 </head>
 <body>
 <%
-	/* 방법2 */
+	/* 방법2. 작성자와 동일한 지 확인 후 수정, 삭제 하기 */
 	if (request.getParameter("error") != null) {
 		out.println("<script> alert('수정 권한이 없습니다.'); history.go(-1); </script>");
 	}
