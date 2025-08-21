@@ -79,6 +79,28 @@ h4.logining {
     background-color: #218838; /* 진한 초록색 */
 }
 
+.searchs {
+    display: inline-block;
+    margin-bottom: 10px;
+    background-color: #dfeedf; /* 흰색에 가까운 초록 */
+    color: #303429;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.searchbutton {
+    display: inline-block;
+    margin-bottom: 10px;
+    background-color: #a3cca2;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
