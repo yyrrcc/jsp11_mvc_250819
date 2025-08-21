@@ -21,10 +21,10 @@ public class BoardDao {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
-	// 만약 게시글이 308개가 있고 15개씩 보인다고 하면 308/15 = 20.xx 총 20 + 1 페이지가 보임
+	// 만약 게시글이 308개가 있고 15개씩 보인다고 하면 308/10 총 30 + 1 페이지가 보임
 	// 그리고 페이지 블록을 10개로 지정하면 1~10, 11~20, 21 이렇게 3개 블록이 보임
-	public static final int pageSize = 15; // 한 페이지당 보이는 글 수
-	public static final int blockSize = 10; // 페이지 블록 크기 (하단에 보여지는 [1][2] ..)
+	public static final int PAGESIZE = 10; // 한 페이지당 보이는 글 수
+	public static final int BLOCKSIZE = 5; // 페이지 블록 크기 (하단에 보여지는 [1][2] ..)
 	
 	
 	
@@ -41,14 +41,14 @@ public class BoardDao {
 				+ " LIMIT ? OFFSET ?";
 		List<BoardDto> boardDtos = new ArrayList<>();
 		
-		int offset = (page - 1) * pageSize;
+		int offset = (page - 1) * PAGESIZE; // offset 구하는 
 
 		try {
 			Class.forName(driverName);
 			conn = DriverManager.getConnection(url, username, password);
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, pageSize);
+			pstmt.setInt(1, PAGESIZE);
 			pstmt.setInt(2, offset);
 			rs = pstmt.executeQuery(); // 모든 데이터값을 전달 받음
 			

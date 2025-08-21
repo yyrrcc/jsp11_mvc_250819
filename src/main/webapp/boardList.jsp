@@ -43,8 +43,8 @@
         			<option value="b.memberid">작성자</option>
         			</select>
         		<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요" class="searchs">
-        		<input type="submit" class="searchbutton" value="검색">
-        		<button type="submit" class="searchbutton">검색버튼</button>
+        		<!-- <input type="submit" class="searchbutton" value="검색"> -->
+        		<button type="submit" class="searchbutton">검색</button>
         	</form>
         	
 	        	<table class="table">
@@ -73,10 +73,33 @@
 	                </tbody>
 	            </table>
 	            
-	            <!-- 페이지 보여주는 곳 -->
-	            <a href="">1페이지</a>
-	            <a href="">1페이지</a>
-	            <a href="">1페이지</a>
+	            <!-- 하단 페이지 블럭 보여주는 곳 -->
+	            <!-- 페이지 이동 버튼 〈〉《》, forEach 통해서 페이지수 찍어주 -->
+				<c:if test="${nowPage > 1 }">
+					<a href="boardList.do?page=1" class="movebutton">《 </a>
+				</c:if>
+				<c:if test="${startPage > 1 }">
+					<a href="boardList.do?page=${startPage - 1 }" class="movebutton">〈 </a>
+				</c:if>
+				
+	            <c:forEach begin="${startPage }" end="${endPage }" var="p">
+	            	<c:choose>
+		            	<c:when test="${p == nowPage }">
+		            		<span class="">${p }페이지</span>
+		            	</c:when>
+		            	<c:otherwise>
+		            		<a href="boardList.do?page=${p }" class="">${p }페이지</a>
+		            	</c:otherwise>
+	            	</c:choose>
+	            </c:forEach>
+	            
+	        	<c:if test="${endPage < totalPage }">
+	        		<a href="boardList.do?page=${endPage + 1 }" class="movebutton"> 〉</a>
+	        	</c:if>
+	
+	        	<c:if test="${nowPage < totalPage}">
+	        		<a href="boardList.do?page=${totalPage }" class="movebutton"> 》</a>
+	        	</c:if>
         </div>
     </main>
 
