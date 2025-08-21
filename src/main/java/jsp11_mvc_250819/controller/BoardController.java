@@ -50,6 +50,9 @@ public class BoardController extends HttpServlet {
       
         
         if (comm.equals("index.do")) { // 홈화면
+        	// *****혼자해보기***** 로그인을 한 상태라면 홈화면에서 로그인 버튼이 아닌 다른 버튼이 보이도록 하기 (세션값 이용)
+        	session = request.getSession();
+        	session.getAttribute("sessionId");
         	viewpage = "index.jsp";
         } else if (comm.equals("boardList.do")) { // 게시판 목록보기
         	// 게시글 검색 한 결과값 확인
