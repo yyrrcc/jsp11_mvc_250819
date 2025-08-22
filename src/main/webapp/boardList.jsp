@@ -37,14 +37,14 @@
         	
         	<form action="#" method="get">
         		<select name="searchType" class="searchs">
-        			<option value="btitle">제목</option>
-        			<option value="bcontent">내용</option>
-        			<option value="searchTC">제목 + 내용</option>
-        			<option value="b.memberid">작성자</option>
+        			<option value="btitle" ${searchType == 'btitle' ? 'selected' : ''}>제목</option>
+        			<option value="bcontent" ${searchType == 'bcontent' ? 'selected' : ''}>내용</option>
+        			<option value="searchTC" ${searchType == 'searchTC' ? 'selected' : ''}>제목 + 내용</option>
+        			<option value="b.memberid" ${searchType == 'b.memberid' ? 'selected' : ''}>작성자</option>
         			</select>
-        		<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요" class="searchs">
+        		<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요" value="${searchKeyword}" class="searchs">
         		<!-- <input type="submit" class="searchbutton" value="검색"> -->
-        		<button type="submit" class="searchbutton">검색</button>
+        		<button type="submit" class="searchbutton"><img src="img/search-icon.png" width="15px"> 검색</button>
         	</form>
         	
 	        	<table class="table">
@@ -72,33 +72,35 @@
 	          	      </c:forEach>
 	                </tbody>
 	            </table>
-	            
+	    
+			            
 	            <!-- 하단 페이지 블럭 보여주는 곳 -->
-	            <!-- 페이지 이동 버튼 〈〉《》, forEach 통해서 페이지수 찍어주 -->
+	            <!-- 페이지 이동 버튼 〈〉《》, forEach 통해서 페이지수 찍어주기 -->
+	            <!-- 검색 결과를 반영하기 위해서 &searchType=${searchType}&searchKeyword=${searchKeyword} 추가 -->
 				<c:if test="${nowPage > 1 }">
-					<a href="boardList.do?page=1" class="movebutton">《 </a>
+					<a href="boardList.do?page=1&searchType=${searchType}&searchKeyword=${searchKeyword}" class="movebutton">《 </a>
 				</c:if>
 				<c:if test="${startPage > 1 }">
-					<a href="boardList.do?page=${startPage - 1 }" class="movebutton">〈 </a>
+					<a href="boardList.do?page=${startPage - 1 }&searchType=${searchType}&searchKeyword=${searchKeyword}" class="movebutton">〈 </a>
 				</c:if>
 				
 	            <c:forEach begin="${startPage }" end="${endPage }" var="p">
 	            	<c:choose>
 		            	<c:when test="${p == nowPage }">
-		            		<span class="">${p }페이지</span>
+		            		<a href="boardList.do?page=${p }&searchType=${searchType}&searchKeyword=${searchKeyword}" class="">${p }페이지</a>
 		            	</c:when>
 		            	<c:otherwise>
-		            		<a href="boardList.do?page=${p }" class="">${p }페이지</a>
+		            		<a href="boardList.do?page=${p }&searchType=${searchType}&searchKeyword=${searchKeyword}" class="">${p }페이지</a>
 		            	</c:otherwise>
 	            	</c:choose>
 	            </c:forEach>
 	            
 	        	<c:if test="${endPage < totalPage }">
-	        		<a href="boardList.do?page=${endPage + 1 }" class="movebutton"> 〉</a>
+	        		<a href="boardList.do?page=${endPage + 1 }&searchType=${searchType}&searchKeyword=${searchKeyword}" class="movebutton"> 〉</a>
 	        	</c:if>
 	
 	        	<c:if test="${nowPage < totalPage}">
-	        		<a href="boardList.do?page=${totalPage }" class="movebutton"> 》</a>
+	        		<a href="boardList.do?page=${totalPage }&searchType=${searchType}&searchKeyword=${searchKeyword}" class="movebutton"> 》</a>
 	        	</c:if>
         </div>
     </main>

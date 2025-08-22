@@ -14,12 +14,12 @@ public class BoardDao {
 	private String driverName = "com.mysql.cj.jdbc.Driver"; 
 	private String url = "jdbc:mysql://localhost:3306/jspdb";
 	private String username = "root";
-	// 이클립스 run configurations 에서 비밀번호 설정함
-	private String password = System.getenv("DB_PASSWORD");
+	private String password = System.getenv("DB_PASSWORD"); // 이클립스 run configurations 에서 비밀번호 설정함
 	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
+	
 	
 	// 만약 게시글이 308개가 있고 15개씩 보인다고 하면 308/10 총 30 + 1 페이지가 보임
 	// 그리고 페이지 블록을 10개로 지정하면 1~10, 11~20, 21 이렇게 3개 블록이 보임
@@ -65,11 +65,6 @@ public class BoardDao {
 				// 실제 글 개수 가져오는 데이터
 				int bno = rs.getInt("bno");
 				
-				// 기존:BoardDto 생성자 이용해서 그 값을 넣어줌
-				//BoardDto boardDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate);
-				// 기존:만들어진 boardDto 인스턴스를 리스트에 넣어준다
-				//boardDtos.add(boardDto);
-				
 				// BoardDto 인스턴스 boardDto에다가 memberDto 넣어주고, 그 전에 memberDto 인스턴스로 만들어줘야 함
 				// 그리고 memberDto 인스턴스에다가 필요한 id, email 값 넣어주기 
 				MemberDto memberDto = new MemberDto();
@@ -80,7 +75,7 @@ public class BoardDao {
 			} 
 
 			} catch (Exception e) {
-				System.out.println("DB 에러 발생, 로그인 실패");
+				System.out.println("DB 에러 발생, 모든 글 가져오기 실패");
 				e.printStackTrace();
 			} finally { 
 				try {
@@ -144,16 +139,18 @@ public class BoardDao {
 
 	
 	
-	// 게시글 검색 결과 보내주는 메서드
-	public List<BoardDto> searchBoardList(String searchKeyword, String searchType) {
+	// 게시글 검색 결과 보내주는 메서드 (+ 이것도 페이징 해줘야 함)
+	public List<BoardDto> searchBoardList(String searchKeyword, String searchType, int page) {
 		String sql = "SELECT row_number() OVER (ORDER BY bnum ASC) AS bno, "
 				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bhit, b.bdate "
 				+ "FROM boardmvc b "
 				+ "LEFT JOIN membermvc m ON b.memberid = m.memberid"
 				+ " WHERE "+ searchType +" LIKE ?"
-				+ " ORDER BY bno DESC;";
+				+ " ORDER BY bno DESC"
+				+ " LIMIT ? OFFSET ?";
 		
 		List<BoardDto> boardDtos = new ArrayList<>();
+		int offset = (page - 1) * PAGESIZE; // offset 구하는 방법
 
 		try {
 			Class.forName(driverName);
@@ -162,6 +159,8 @@ public class BoardDao {
 			pstmt = conn.prepareStatement(sql);
 			// sql where문에서 LIKE로 받은 경우엔 다음과 같이 만들어줘야 한다
 			pstmt.setString(1, "%" + searchKeyword + "%");
+			pstmt.setInt(2, PAGESIZE);
+			pstmt.setInt(3, offset);
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
@@ -212,6 +211,52 @@ public class BoardDao {
 			}
 		return boardDtos; // 기존:리스트 객체로 된 boardDtos 반환
 	}
+	
+	
+	
+	// 게시판에 검색한 결과에 대한 모든 글 개수 반환하는 메서드
+		public int countsearchBoard(String searchKeyword, String searchType) {
+			String sql = "SELECT count(*) AS totalSearchCount "
+					+ "FROM boardmvc b "
+					+ "LEFT JOIN membermvc m ON b.memberid = m.memberid "
+					+ "WHERE "+ searchType +" LIKE ?";
+			int totalSearchCount = 0;
+			
+			try {
+				Class.forName(driverName);
+				conn = DriverManager.getConnection(url, username, password);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%" + searchKeyword + "%");
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					totalSearchCount = rs.getInt("totalSearchCount");
+				}
+
+				} catch (Exception e) {
+					System.out.println("DB 에러 발생, 검색에 알맞은 모든 글 가져오기 실패");
+					e.printStackTrace();
+				} finally { 
+					try {
+						if (rs != null) {
+							rs.close();
+					}
+						if (pstmt != null) {
+							pstmt.close();
+						}
+						if (conn != null) {
+							conn.close();
+					}
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			return totalSearchCount;
+		}
+	
+	
 	
 	
 	

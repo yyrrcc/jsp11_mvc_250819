@@ -1,3 +1,4 @@
+/*
 package jsp11_mvc_250819.controller;
 
 import jakarta.servlet.RequestDispatcher;
@@ -7,9 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jsp11_mvc_250819.command.BoardCommand;
-import jsp11_mvc_250819.command.BoardEditOkCommand;
-import jsp11_mvc_250819.command.BoardWriteOkCommand;
 import jsp11_mvc_250819.dao.BoardDao;
 import jsp11_mvc_250819.dao.MemberDao;
 import jsp11_mvc_250819.dto.BoardDto;
@@ -19,12 +17,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// 게시글 모든 글 검색, 검색 결과 글 보여주기, 관련된 메서드 추가 or bno 사용하기
 @WebServlet("*.do")
-public class BoardController extends HttpServlet {
+public class BoardController2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public BoardController() {
+    public BoardController2() {
         super();
     }
 
@@ -51,8 +49,6 @@ public class BoardController extends HttpServlet {
         List<BoardDto> boardDtos = new ArrayList<>();
         //List<BoardMemberDto> bmDtos = new ArrayList<>(); // board, member dto 합친 거
       
-        // 부모 Command
-        BoardCommand boardCommand;
         
         if (comm.equals("index.do")) { // 홈화면
         	// *****혼자해보기***** 로그인을 한 상태라면 홈화면에서 로그인 버튼이 아닌 다른 버튼이 보이도록 하기 (세션값 이용)
@@ -63,15 +59,16 @@ public class BoardController extends HttpServlet {
         	// 페이징!
         	int nowPage = 1; // 현재 페이지, 기본 페이지, 초기화라 생각하면 됨 
         	// .jsp에서 페이지의 값을 안 받으면 기본 1페이지, 받으면 받은 페이지로 이동
-    		if (request.getParameter("page") == null) { // *************************************************
+    		if (request.getParameter("page") == null) {
     			nowPage = 1;
     		} else {
     			nowPage = Integer.parseInt(request.getParameter("page"));
     		}
         	
-    		// ********************************************************************
+    		
         	int totalCount = boardDao.countBoard(); //총 글 수
-                
+            int totalPage = (int) Math.ceil((double) totalCount / BoardDao.PAGESIZE); //  페이지 수
+            
         	// 게시글 검색 한 결과값 확인
         	String searchType = request.getParameter("searchType");
         	String searchKeyword = request.getParameter("searchKeyword");
@@ -80,17 +77,13 @@ public class BoardController extends HttpServlet {
         	
         	// 공백을 입력했을 때 모든 글이 나올 수 있게 !searchKeyword.strip().isEmpty()
         	if (searchType != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) { // 게시글 검색한 경우
-        		totalCount = boardDao.countsearchBoard(searchKeyword, searchType); // 검색 결과 총 개수
-        		boardDtos = boardDao.searchBoardList(searchKeyword, searchType, nowPage); // 검색 결과 목록
-        		
-        		// 검색 폼 유지를 위해 검색 조건을 JSP에 전달
-        		request.setAttribute("searchKeyword", searchKeyword);
-        		request.setAttribute("searchType", searchType);
+        		boardDtos = boardDao.searchBoardList(searchKeyword, searchType, nowPage);
         	} else { // 모든 게시판 글 목록 원하는 경우
         		boardDtos = boardDao.boardList(nowPage);
         	}
-        	
-        	int totalPage = (int) Math.ceil((double) totalCount / BoardDao.PAGESIZE); // 총 페이지 수
+        	request.setAttribute("nowPage", nowPage);
+    		request.setAttribute("totalPage", totalPage);
+        	request.setAttribute("boardDtos", boardDtos);
         	
         	// 페이지 블록의 시작과 끝을 알려주는 페이지 변수
             int startPage = ((nowPage - 1) / BoardDao.BLOCKSIZE) * BoardDao.BLOCKSIZE + 1;
@@ -98,12 +91,6 @@ public class BoardController extends HttpServlet {
     		if (endPage > totalPage) {
     			endPage = totalPage;
     		}
-    		
-        	request.setAttribute("nowPage", nowPage);
-        	request.setAttribute("totalCount", totalCount);
-    		request.setAttribute("totalPage", totalPage);
-        	request.setAttribute("boardDtos", boardDtos);
-        	
             request.setAttribute("startPage", startPage);
             request.setAttribute("endPage", endPage);
 
@@ -115,10 +102,9 @@ public class BoardController extends HttpServlet {
         	BoardDto boardDto = boardDao.boardDetail(bnum);
         	if (boardDto == null) { // 글이 삭제 된 경우
             	request.setAttribute("msg", "존재하지 않은 게시글 입니다.");
-        		/* 삭제된 글일 경우 방법 2. jsp에서 getParameter로 가져오기
-            	response.sendRedirect("boardDetail.jsp?msg=0");
-            	return;
-            	*/
+        		//삭제된 글일 경우 방법 2. jsp에서 getParameter로 가져오기
+            	//response.sendRedirect("boardDetail.jsp?msg=0");
+            	//return;
         	} else {
             	request.setAttribute("boardDto", boardDto);
         	}
@@ -134,13 +120,10 @@ public class BoardController extends HttpServlet {
         	}
         	viewpage = "boardWrite.jsp";
         } else if (comm.equals("boardWriteOk.do")) { // 글작성 버튼 누르고 난 후
-//        	String title = request.getParameter("title");
-//        	String content = request.getParameter("content");
-//        	String writer = request.getParameter("writer");
-//        	boardDao.boardWrite(title, content, writer);
-        	
-        	boardCommand = new BoardWriteOkCommand();
-        	boardCommand.execute(request, response);
+        	String title = request.getParameter("title");
+        	String content = request.getParameter("content");
+        	String writer = request.getParameter("writer");
+        	boardDao.boardWrite(title, content, writer);
         	
         	// form get, post 글 넘어가고 새로고침하면 버그 오류 생김. 안 나오게 하기 위한 조치
         	// forward 하면 안됨. 따라서 sendRedirect로 보내기.
@@ -164,17 +147,15 @@ public class BoardController extends HttpServlet {
         		return;
         	}
         } else if (comm.equals("boardEditOk.do")) { // 글 수정한 후 글 내용 보기
-//        	String bnum = request.getParameter("num");
-//        	String title = request.getParameter("title");
-//        	String content = request.getParameter("content");
-//        	String writer = request.getParameter("writer");
-//        	boardDao.boardUpdate(bnum, title, content);
-//        	
-//        	BoardDto boardDto = boardDao.boardDetail(bnum); // 수정한 글을 Dto에 넣어주고 수정된 글 확인하기
-//        	request.setAttribute("boardDto", boardDto);
-        	boardCommand = new BoardEditOkCommand();
-        	boardCommand.execute(request, response);
+        	String bnum = request.getParameter("num");
+        	String title = request.getParameter("title");
+        	String content = request.getParameter("content");
+        	String writer = request.getParameter("writer");
+        	boardDao.boardUpdate(bnum, title, content);
         	
+        	// 수정한 글을 Dto에 넣어주고 수정된 글 확인하기
+        	BoardDto boardDto = boardDao.boardDetail(bnum);
+        	request.setAttribute("boardDto", boardDto);
         	viewpage = "boardDetail.jsp";
         } else if (comm.equals("boardDelete.do")) { // 글 삭제
         	//String num = request.getParameter("bnum");
@@ -219,3 +200,4 @@ public class BoardController extends HttpServlet {
 	}
 
 }
+*/
